@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>server Room</title>
+</head>
+<body>
+
+    <a id="top-left">o</a>
+
+    {{ room_name|json_script:"room-name" }}
+    <script>
+
+        const roomName = JSON.parse(document.getElementById('room-name').textContent);
+
+        const serverSocket = new WebSocket(
+            'ws://'
+            + window.location.host
+            + '/ws/server/'
+            + roomName
+            + '/'
+        );
+
+
+        serverSocket.onmessage = function(e) {
+            const data = JSON.parse(e.data);
+            console.log(data);
+            document.querySelector('#top-left').innerHTML = "x";
+        };
+
+
+        serverSocket.onclose = function(e) {
+            console.error('server socket closed unexpectedly');
+        };
+
+
+        document.querySelector('#top-left').onclick = function(e) {
+            const messageInputDom = document.querySelector('#top-left');
+
+            const message = messageInputDom.innerHTML;
+            serverSocket.send(JSON.stringify({
+                'message': message
+            }));
+            messageInputDom.innerHTML = '';
+        };
+    </script>
+</body>
+</html>
