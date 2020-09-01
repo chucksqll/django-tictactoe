@@ -6,7 +6,25 @@
 </head>
 <body>
 
-    <a id="top-left">o</a>
+    <table>
+        <tbody>
+            <tr>
+                <td role="button" class="game-square" id="top-left">o</td>
+                <td role="button" class="game-square" id="top-mid">o</a></td>
+                <td role="button" class="game-square" id="top-right">o</a></td>
+            </tr>
+            <tr>
+                <td role="button" class="game-square" id="mid-left">o</a></td>
+                <td role="button" class="game-square" id="mid-mid">o</a></td>
+                <td role="button" class="game-square" id="mid-right">o</a></td>
+            </tr>
+            <tr>
+                <td role="button" class="game-square" id="bot-left">o</a></td>
+                <td role="button" class="game-square" id="bot-mid">o</a></td>
+                <td role="button" class="game-square" id="bot-right">o</a></td>
+            </tr>
+        </tbody>
+    </table>
 
     {{ room_name|json_script:"room-name" }}
     <script>
@@ -24,8 +42,7 @@
 
         serverSocket.onmessage = function(e) {
             const data = JSON.parse(e.data);
-            console.log(data);
-            document.querySelector('#top-left').innerHTML = "x";
+            document.getElementById(data.message).innerHTML="x";
         };
 
 
@@ -34,15 +51,27 @@
         };
 
 
-        document.querySelector('#top-left').onclick = function(e) {
-            const messageInputDom = document.querySelector('#top-left');
+        // document.querySelector('#top-left').onclick = function(e) {
+        //     const messageInputDom = document.querySelector('#top-left');
+        //     console.log(e.target.id);
+        //     const message = messageInputDom.innerHTML;
+        //     serverSocket.send(JSON.stringify({
+        //         'message': message
+        //     }));
+        //     messageInputDom.innerHTML = '';
+        // };
+        const squares = document.querySelectorAll('.game-square');
 
-            const message = messageInputDom.innerHTML;
-            serverSocket.send(JSON.stringify({
-                'message': message
-            }));
-            messageInputDom.innerHTML = '';
-        };
+        squares.forEach((e) => {
+            e.onclick = function(event) {
+                // console.log(e);
+                // e.innerHTML="tag";
+                // console.log(event);
+                serverSocket.send(JSON.stringify({
+                    'message': e.id
+                }));
+            }
+        }) 
     </script>
 </body>
 </html>
