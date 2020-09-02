@@ -1,0 +1,8 @@
+.game-square{
+	width:100px;
+	height:100px;
+	color: #12fabd;
+	background-color: #333333;
+	font-size:80px;
+	text-align:center;
+}
