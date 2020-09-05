@@ -59,6 +59,8 @@ class ServerConsumer(AsyncWebsocketConsumer):
     async def server_message(self, event):
         message = event['message']
         text = event['text']
+        if text is None:
+            text = ''
         game_result = event['game_result']
         # Send message to WebSocket
         await self.send(text_data=json.dumps({
