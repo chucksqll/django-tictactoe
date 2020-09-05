@@ -1,9 +1,21 @@
 from django.shortcuts import render
+from django.views.generic import TemplateView
 
 def index(request):
     return render(request, 'server/index.html')
 
-def room(request, room_name):
-    return render(request, 'server/room.html', {
-        'room_name': room_name
-    })
+
+class RoomListView(TemplateView):
+	template_name = 'server/room.html'
+	board = [
+		['','',''],
+		['','',''],
+		['','',''],
+	]
+
+	def get_context_data(self, **kwargs):
+		return super().get_context_data(
+			board=self.board,
+			**kwargs)
+			
+

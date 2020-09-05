@@ -7,23 +7,25 @@
     <link rel="stylesheet" type="text/css" href="{% static 'server/room.css' %}">
 </head>
 <body>
-
+        <input type="radio" name="choice" value="o"> Ring
+        <input type="radio" name="choice" value="x"> Cross
+        <input type="button" id="btn" value="Show Selected Value">
     <table>
         <tbody>
             <tr>
-                <td  role="button" class="game-square" id="top-left">o</td>
-                <td role="button" class="game-square" id="top-mid">o</a></td>
-                <td role="button" class="game-square" id="top-right">o</a></td>
+                <td  role="button" class="game-square" id="top-left">{{board.0.0}}</td>
+                <td role="button" class="game-square" id="top-mid">{{board.0.1}}</td>
+                <td role="button" class="game-square" id="top-right">{{board.0.2}}</td>
             </tr>
             <tr>
-                <td role="button" class="game-square" id="mid-left">o</a></td>
-                <td role="button" class="game-square" id="mid-mid">o</a></td>
-                <td role="button" class="game-square" id="mid-right">o</a></td>
+                <td role="button" class="game-square" id="mid-left">{{board.1.0}}</td>
+                <td role="button" class="game-square" id="mid-mid">{{board.1.1}}</td>
+                <td role="button" class="game-square" id="mid-right">{{board.1.2}}</td>
             </tr>
             <tr>
-                <td role="button" class="game-square" id="bot-left">o</a></td>
-                <td role="button" class="game-square" id="bot-mid">o</a></td>
-                <td role="button" class="game-square" id="bot-right">o</a></td>
+                <td role="button" class="game-square" id="bot-left">{{board.2.0}}</td>
+                <td role="button" class="game-square" id="bot-mid">{{board.2.1}}</td>
+                <td role="button" class="game-square" id="bot-right">{{board.2.2}}</td>
             </tr>
         </tbody>
     </table>
@@ -41,10 +43,24 @@
             + '/'
         );
 
+        const btn = document.querySelector('#btn');
+        // handle click button
+        let selectedValue=null;
+        btn.onclick = function () {
+            const rbs = document.querySelectorAll('input[name="choice"]');
+
+            for (const rb of rbs) {
+                if (rb.checked) {
+                    selectedValue = rb.value;
+                    break;
+                }
+            }
+        };
+        
 
         serverSocket.onmessage = function(e) {
             const data = JSON.parse(e.data);
-            document.getElementById(data.message).innerHTML="x";
+            document.getElementById(data.message).textContent=data.text;
         };
 
 
@@ -58,7 +74,8 @@
         squares.forEach((e) => {
             e.onclick = function(event) {
                 serverSocket.send(JSON.stringify({
-                    'message': e.id
+                    'message': e.id,
+                    'text': selectedValue
                 }));
             }
         }) 
