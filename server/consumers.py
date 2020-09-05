@@ -21,6 +21,7 @@ class ServerConsumer(AsyncWebsocketConsumer):
             self.channel_name
         )
 
+
     # Receive message from WebSocket
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
@@ -28,7 +29,6 @@ class ServerConsumer(AsyncWebsocketConsumer):
         text = text_data_json['text']
 
         index = message.split('-')
-
         messageToIndex = {
             'top': 0,
             'left' : 0,
@@ -36,11 +36,13 @@ class ServerConsumer(AsyncWebsocketConsumer):
             'bot': 2,
             'right' : 2
         }
+        i = messageToIndex[index[0]]
+        j = messageToIndex[index[1]]
+        RoomListView.board[i][j]=text
 
-        x = messageToIndex[index[0]]
-        y = messageToIndex[index[1]]
+        #check if someone wins and who
+        game_result = self.check_if_over()
 
-        RoomListView.board[x][y]=text
 
         # Send message to room group
         await self.channel_layer.group_send(
@@ -48,7 +50,8 @@ class ServerConsumer(AsyncWebsocketConsumer):
             {
                 'type': 'server_message',
                 'message': message,
-                'text' : text
+                'text' : text,
+                'game_result': game_result
             }
         )
 
@@ -56,8 +59,36 @@ class ServerConsumer(AsyncWebsocketConsumer):
     async def server_message(self, event):
         message = event['message']
         text = event['text']
+        game_result = event['game_result']
         # Send message to WebSocket
         await self.send(text_data=json.dumps({
             'message': message,
-            'text' : text
+            'text' : text,
+            'game_result': game_result
         }))
+
+
+    def check_if_over(self):
+        for x in range(3):
+            if (RoomListView.board[0][x] == RoomListView.board[1][x] and
+                    RoomListView.board[0][x] == RoomListView.board[2][x] and
+                    RoomListView.board[0][x]!=''):
+                return RoomListView.board[0][x]
+
+        for y in range(3):
+            if (RoomListView.board[y][0] == RoomListView.board[y][1] and
+                    RoomListView.board[y][0] == RoomListView.board[y][2] and
+                    RoomListView.board[y][0]!=''):
+                return RoomListView.board[y][0]
+
+        if (RoomListView.board[0][0] == RoomListView.board[1][1] and
+                RoomListView.board[0][0] == RoomListView.board[2][2] and
+                RoomListView.board[0][0]!=''):
+            return RoomListView.board[0][0]
+
+        if (RoomListView.board[2][0] == RoomListView.board[1][1] and
+                RoomListView.board[2][0] == RoomListView.board[0][2] and
+                RoomListView.board[2][0]!=''):
+            return RoomListView.board[2][0]
+
+        return False

@@ -7,9 +7,11 @@
     <link rel="stylesheet" type="text/css" href="{% static 'server/room.css' %}">
 </head>
 <body>
-        <input type="radio" name="choice" value="o"> Ring
-        <input type="radio" name="choice" value="x"> Cross
-        <input type="button" id="btn" value="Show Selected Value">
+    <input type="radio" name="choice" value="o"> Ring
+    <input type="radio" name="choice" value="x"> Cross
+    <input type="button" id="btn" value="Show Selected Value">
+
+    <div id="game-result"></div>
     <table>
         <tbody>
             <tr>
@@ -56,11 +58,16 @@
                 }
             }
         };
-        
+
 
         serverSocket.onmessage = function(e) {
             const data = JSON.parse(e.data);
             document.getElementById(data.message).textContent=data.text;
+
+            if(data.game_result != false){
+                document.getElementById('game-result').textContent='Player: ' + data.game_result + ' wins!';
+            }
+
         };
 
 
