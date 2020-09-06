@@ -28,17 +28,23 @@ class ServerConsumer(AsyncWebsocketConsumer):
         message = text_data_json['message']
         text = text_data_json['text']
 
-        index = message.split('-')
-        messageToIndex = {
-            'top': 0,
-            'left' : 0,
-            'mid': 1,
-            'bot': 2,
-            'right' : 2
-        }
-        i = messageToIndex[index[0]]
-        j = messageToIndex[index[1]]
-        RoomListView.board[i][j]=text
+        if text == RoomListView.last_turn:
+            print('wait, until your turn')
+            text=''
+        elif text != '':
+            RoomListView.last_turn=text
+            index = message.split('-')
+            messageToIndex = {
+                'top': 0,
+                'left' : 0,
+                'mid': 1,
+                'bot': 2,
+                'right' : 2
+            }
+            i = messageToIndex[index[0]]
+            j = messageToIndex[index[1]]
+            if(RoomListView.board[i][j]==''):
+                RoomListView.board[i][j]=text
 
         #check if someone wins and who
         game_result = self.check_if_over()
@@ -62,6 +68,7 @@ class ServerConsumer(AsyncWebsocketConsumer):
         if text is None:
             text = ''
         game_result = event['game_result']
+
         # Send message to WebSocket
         await self.send(text_data=json.dumps({
             'message': message,
@@ -92,5 +99,8 @@ class ServerConsumer(AsyncWebsocketConsumer):
                 RoomListView.board[2][0] == RoomListView.board[0][2] and
                 RoomListView.board[2][0]!=''):
             return RoomListView.board[2][0]
-
-        return False
+        for x in range(3):
+            for y in range(3):
+                if RoomListView.board[y][x] =='':
+                    return False
+        return "Draw"

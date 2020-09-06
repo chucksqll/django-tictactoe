@@ -64,10 +64,19 @@
 
         serverSocket.onmessage = function(e) {
             const data = JSON.parse(e.data);
-            document.getElementById(data.message).textContent=data.text;
+
+            // prevent from rewriting game-sqaure with another choice
+            if( document.getElementById(data.message).textContent == ''){
+                document.getElementById(data.message).textContent = data.text;
+            }
 
             if(data.game_result != false){
-                document.getElementById('game-result').textContent='Player: ' + data.game_result + ' wins!';
+                if(data.game_result =='Draw'){
+                    document.getElementById('game-result').textContent = 'It\'s a Draw!';
+                }
+                else{
+                    document.getElementById('game-result').textContent='Player: ' + data.game_result + ' wins!';
+                }
             }
 
         };
