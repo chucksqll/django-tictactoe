@@ -10,9 +10,10 @@
     <div id="cross-ring-choice">
         <input type="radio" name="choice" value="o"> Ring
         <input type="radio" name="choice" value="x"> Cross
-        <input type="button" id="btn" value="Select">
+        <input type="button" id="choice-btn" value="Select">
     </div>
     <div id="game-result"></div>
+    <button id="reset-btn">New Game</button>
     <table>
         <tbody>
             <tr>
@@ -46,10 +47,9 @@
             + '/'
         );
 
-        const btn = document.querySelector('#btn');
-        // handle click button
+        const choice_btn = document.querySelector('#choice-btn');
         let selectedValue=null;
-        btn.onclick = function () {
+        choice_btn.onclick = function () {
             const rbs = document.querySelectorAll('input[name="choice"]');
 
             for (const rb of rbs) {
@@ -61,12 +61,23 @@
             document.getElementById('cross-ring-choice').style.display ='none';
         };
 
+        const reset_btn = document.querySelector('#reset-btn')
+        reset_btn.onclick = function () {
+            console.log('reset');
+            serverSocket.send(JSON.stringify({
+                'message': 'reset',
+                'text': ''
+            }));
+        };
+
 
         serverSocket.onmessage = function(e) {
             const data = JSON.parse(e.data);
-
             // prevent from rewriting game-sqaure with another choice
-            if( document.getElementById(data.message).textContent == ''){
+            if(data.message=='reset'){
+                location.reload();
+            } 
+            else if( document.getElementById(data.message).textContent == ''){
                 document.getElementById(data.message).textContent = data.text;
             }
 
@@ -80,8 +91,16 @@
                     document.getElementById('game-result').textContent='Player: ' + data.game_result + ' wins!';
                 }
             }
-
-
+            else{
+                let next_turn = '';
+                if(data.text == 'x') {
+                    next_turn = 'o';
+                }
+                else {
+                    next_turn = 'x';
+                }
+                document.getElementById('game-result').textContent = 'Now is ' + next_turn + ' turn!';
+            }
         };
 
 
