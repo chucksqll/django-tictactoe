@@ -71,6 +71,8 @@
             }
 
             if(data.game_result != false){
+                //if game over
+                selectedValue=''
                 if(data.game_result =='Draw'){
                     document.getElementById('game-result').textContent = 'It\'s a Draw!';
                 }
@@ -78,6 +80,7 @@
                     document.getElementById('game-result').textContent='Player: ' + data.game_result + ' wins!';
                 }
             }
+
 
         };
 

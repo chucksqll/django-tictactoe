@@ -32,6 +32,8 @@ class ServerConsumer(AsyncWebsocketConsumer):
             print('wait, until your turn')
             text=''
         elif text != '':
+            if text is None:
+                text = ''
             RoomListView.last_turn=text
             index = message.split('-')
             messageToIndex = {
@@ -65,8 +67,6 @@ class ServerConsumer(AsyncWebsocketConsumer):
     async def server_message(self, event):
         message = event['message']
         text = event['text']
-        if text is None:
-            text = ''
         game_result = event['game_result']
 
         # Send message to WebSocket
