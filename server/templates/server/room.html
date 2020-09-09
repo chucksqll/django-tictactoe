@@ -3,36 +3,50 @@
 <html>
 <head>
     <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>server Room</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="{% static 'server/room.css' %}">
 </head>
 <body>
-    <div id="cross-ring-choice">
-        <input type="radio" name="choice" value="o"> Ring
-        <input type="radio" name="choice" value="x"> Cross
-        <input type="button" id="choice-btn" value="Select">
+    <div class="wrapper">
+        <div class="container" id="cross-ring-choice">
+            <div class="row">
+                <div class="col"><input type="radio" name="choice" value="O"> Ring </div>
+                <div class="col"><input type="radio" name="choice" value="X"> Cross </div>
+                <div class="col"><input type="button" id="choice-btn" value="Select"></div>
+            </div>      
+        </div>
+        <br>
+        <button class="" id="reset-btn">New Game</button>
+        <br>
+        <div id="game-result"></div>
+        
     </div>
-    <div id="game-result"></div>
-    <button id="reset-btn">New Game</button>
-    <table>
-        <tbody>
-            <tr>
-                <td role="button" class="game-square" id="top-left">{{board.0.0}}</td>
-                <td role="button" class="game-square" id="top-mid">{{board.0.1}}</td>
-                <td role="button" class="game-square" id="top-right">{{board.0.2}}</td>
-            </tr>
-            <tr>
-                <td role="button" class="game-square" id="mid-left">{{board.1.0}}</td>
-                <td role="button" class="game-square" id="mid-mid">{{board.1.1}}</td>
-                <td role="button" class="game-square" id="mid-right">{{board.1.2}}</td>
-            </tr>
-            <tr>
-                <td role="button" class="game-square" id="bot-left">{{board.2.0}}</td>
-                <td role="button" class="game-square" id="bot-mid">{{board.2.1}}</td>
-                <td role="button" class="game-square" id="bot-right">{{board.2.2}}</td>
-            </tr>
-        </tbody>
-    </table>
+
+    
+
+    
+
+    <div class="game-container">
+        <div class="container board">
+            <div class="row">
+                <div role="button" class="col game-square" id="top-left">{{board.0.0}}</div>
+                <div role="button" class="col game-square" id="top-mid">{{board.0.1}}</div>
+                <div role="button" class="col game-square" id="top-right">{{board.0.2}}</div>
+            </div>
+            <div class="row">
+                <div role="button" class="col game-square" id="mid-left">{{board.1.0}}</div>
+                <div role="button" class="col game-square" id="mid-mid">{{board.1.1}}</div>
+                <div role="button" class="col game-square" id="mid-right">{{board.1.2}}</div>
+            </div>
+            <div class="row">
+                <div role="button" class="col game-square" id="bot-left">{{board.2.0}}</div>
+                <div role="button" class="col game-square" id="bot-mid">{{board.2.1}}</div>
+                <div role="button" class="col game-square" id="bot-right">{{board.2.2}}</div>
+            </div>
+        </div>
+    </div>
 
     {{ room_name|json_script:"room-name" }}
     <script>
@@ -93,11 +107,11 @@
             }
             else{
                 let next_turn = '';
-                if(data.text == 'x') {
-                    next_turn = 'o';
+                if(data.text == 'X') {
+                    next_turn = 'O';
                 }
                 else {
-                    next_turn = 'x';
+                    next_turn = 'X';
                 }
                 document.getElementById('game-result').textContent = 'Now is ' + next_turn + ' turn!';
             }
@@ -120,5 +134,8 @@
             }
         }) 
     </script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
 </body>
 </html>

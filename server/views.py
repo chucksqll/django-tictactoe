@@ -13,7 +13,7 @@ class RoomView(TemplateView):
 		['','',''],
 		['','',''],
 	]
-	last_turn = 'o'
+	last_turn = 'O'
 
 
 	def get_context_data(self, **kwargs):

@@ -1,8 +1,47 @@
+body{
+	background-color: black;
+}
 .game-square{
-	width:100px;
-	height:100px;
-	color: #12fabd;
+	width:114px;
+	height:114px;
+	color: #f1ab05;
 	background-color: #333333;
 	font-size:80px;
 	text-align:center;
+	margin: 3px;
+}
+.game-container{
+	width:360px;
+	height:360px;
+	/*background-color: black;*/
+	margin: auto;
+	/*padding: 3px;*/
+
+}
+.wrapper{
+	width:360px;
+	margin: 20px auto;
+	text-align: center;
+
+}
+#choice-btn{
+	color: #f1ab05;
+	background-color: #333333;
+	font-weight: bold;
+}
+#game-result{
+	font-size:30px;
+	color: white;
+	font-weight: bold;
+}
+#reset-btn{
+	color: #f1ab05;
+	font-size: 20px;
+	font-weight: bold;
+	background-color: #333333;
+}
+#cross-ring-choice{
+	color: white;
+	font-size: 20px;
+	font-weight: bold;
 }

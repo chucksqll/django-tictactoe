@@ -75,7 +75,7 @@ class ServerConsumer(AsyncWebsocketConsumer):
 
 
     def restart(self):
-        RoomView.last_turn='o'
+        RoomView.last_turn='O'
         for i in range(3):
             for j in range(3):
                 RoomView.board[i][j]=''
