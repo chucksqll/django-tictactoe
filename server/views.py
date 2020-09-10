@@ -8,17 +8,12 @@ def index(request):
 
 class RoomView(TemplateView):
 	template_name = 'server/room.html'
-	board = [
-		['','',''],
-		['','',''],
-		['','',''],
-	]
-	last_turn = 'O'
+	board={}
+	last_turn = {}
 
 
 	def get_context_data(self, **kwargs):
 		return super().get_context_data(
-			board=self.board,
 			**kwargs)
 			
 

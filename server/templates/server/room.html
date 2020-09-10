@@ -17,33 +17,29 @@
                 <div class="col"><input type="button" id="choice-btn" value="Select"></div>
             </div>      
         </div>
+        <div id="which-player"></div>
         <br>
         <button class="" id="reset-btn">New Game</button>
         <br>
         <div id="game-result"></div>
-        
     </div>
-
-    
-
-    
 
     <div class="game-container">
         <div class="container board">
             <div class="row">
-                <div role="button" class="col game-square" id="top-left">{{board.0.0}}</div>
-                <div role="button" class="col game-square" id="top-mid">{{board.0.1}}</div>
-                <div role="button" class="col game-square" id="top-right">{{board.0.2}}</div>
+                <div role="button" class="col game-square" id="top-left"></div>
+                <div role="button" class="col game-square" id="top-mid"></div>
+                <div role="button" class="col game-square" id="top-right"></div>
             </div>
             <div class="row">
-                <div role="button" class="col game-square" id="mid-left">{{board.1.0}}</div>
-                <div role="button" class="col game-square" id="mid-mid">{{board.1.1}}</div>
-                <div role="button" class="col game-square" id="mid-right">{{board.1.2}}</div>
+                <div role="button" class="col game-square" id="mid-left"></div>
+                <div role="button" class="col game-square" id="mid-mid"></div>
+                <div role="button" class="col game-square" id="mid-right"></div>
             </div>
             <div class="row">
-                <div role="button" class="col game-square" id="bot-left">{{board.2.0}}</div>
-                <div role="button" class="col game-square" id="bot-mid">{{board.2.1}}</div>
-                <div role="button" class="col game-square" id="bot-right">{{board.2.2}}</div>
+                <div role="button" class="col game-square" id="bot-left"></div>
+                <div role="button" class="col game-square" id="bot-mid"></div>
+                <div role="button" class="col game-square" id="bot-right"></div>
             </div>
         </div>
     </div>
@@ -72,7 +68,8 @@
                     break;
                 }
             }
-            document.getElementById('cross-ring-choice').style.display ='none';
+            document.getElementById('which-player').textContent = 'You are ' + selectedValue + ' player!'
+            document.getElementById('cross-ring-choice').style.display = 'none';
         };
 
         const reset_btn = document.querySelector('#reset-btn')
@@ -84,10 +81,11 @@
             }));
         };
 
+        const squares = document.querySelectorAll('.game-square');
 
         serverSocket.onmessage = function(e) {
             const data = JSON.parse(e.data);
-            // prevent from rewriting game-sqaure with another choice
+
             if(data.message=='reset'){
                 location.reload();
             } 
@@ -110,11 +108,18 @@
                 if(data.text == 'X') {
                     next_turn = 'O';
                 }
-                else {
+                else if(data.text == 'O') {
                     next_turn = 'X';
                 }
                 document.getElementById('game-result').textContent = 'Now is ' + next_turn + ' turn!';
             }
+
+            for(let i=0;i<3;i++){
+                for(let j=0;j<3;j++){
+                    squares[i*3+j].textContent=data.board[i][j];
+                }
+            }
+
         };
 
 
@@ -122,8 +127,6 @@
             console.error('server socket closed unexpectedly');
         };
 
-
-        const squares = document.querySelectorAll('.game-square');
 
         squares.forEach((e) => {
             e.onclick = function(event) {

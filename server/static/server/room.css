@@ -2,24 +2,21 @@ body{
 	background-color: black;
 }
 .game-square{
-	width:114px;
-	height:114px;
+	width: 114px;
+	height: 114px;
 	color: #f1ab05;
 	background-color: #333333;
-	font-size:80px;
-	text-align:center;
+	font-size: 80px;
+	text-align: center;
 	margin: 3px;
 }
 .game-container{
 	width:360px;
 	height:360px;
-	/*background-color: black;*/
 	margin: auto;
-	/*padding: 3px;*/
-
 }
 .wrapper{
-	width:360px;
+	width: 360px;
 	margin: 20px auto;
 	text-align: center;
 
@@ -28,6 +25,9 @@ body{
 	color: #f1ab05;
 	background-color: #333333;
 	font-weight: bold;
+}
+#which-player{
+	color: white;
 }
 #game-result{
 	font-size:30px;

@@ -9,10 +9,18 @@ class ServerConsumer(AsyncWebsocketConsumer):
         self.room_name = self.scope['url_route']['kwargs']['room_name']
         self.room_group_name = 'server_%s' % self.room_name
 
+        if not self.room_name in RoomView.board:
+            RoomView.board[self.room_name] = [
+                ['','',''],
+                ['','',''],
+                ['','',''],
+            ]
+            RoomView.last_turn[self.room_name] = 'O'
+
         # Join room group
         await self.channel_layer.group_add(
             self.room_group_name,
-            self.channel_name
+            self.channel_name,
         )
 
         await self.accept()
@@ -34,7 +42,7 @@ class ServerConsumer(AsyncWebsocketConsumer):
 
         if message =='reset':
             self.restart()           
-        elif text == RoomView.last_turn:
+        elif text == RoomView.last_turn[self.room_name]:
             print('wait, until your turn')
             text=''
         elif text != '':
@@ -70,19 +78,20 @@ class ServerConsumer(AsyncWebsocketConsumer):
         await self.send(text_data=json.dumps({
             'message': message,
             'text' : text,
-            'game_result': game_result
+            'game_result': game_result,
+            'board': RoomView.board[self.room_name]
         }))
 
 
     def restart(self):
-        RoomView.last_turn='O'
+        RoomView.last_turn[self.room_name]='O'
         for i in range(3):
             for j in range(3):
-                RoomView.board[i][j]=''
+                RoomView.board[self.room_name][i][j]=''
 
 
     def fill_board(self, message, text):
-        RoomView.last_turn=text
+        RoomView.last_turn[self.room_name]=text
         index = message.split('-')
         messageToIndex = {
             'top': 0,
@@ -93,34 +102,34 @@ class ServerConsumer(AsyncWebsocketConsumer):
         }
         i = messageToIndex[index[0]]
         j = messageToIndex[index[1]]
-        if(RoomView.board[i][j]==''):
-            RoomView.board[i][j]=text
+        if(RoomView.board[self.room_name][i][j]==''):
+            RoomView.board[self.room_name][i][j]=text
 
 
     def check_if_over(self):
         for x in range(3):
-            if (RoomView.board[0][x] == RoomView.board[1][x] and
-                    RoomView.board[0][x] == RoomView.board[2][x] and
-                    RoomView.board[0][x]!=''):
-                return RoomView.board[0][x]
+            if (RoomView.board[self.room_name][0][x] == RoomView.board[self.room_name][1][x] and
+                    RoomView.board[self.room_name][0][x] == RoomView.board[self.room_name][2][x] and
+                    RoomView.board[self.room_name][0][x]!=''):
+                return RoomView.board[self.room_name][0][x]
 
         for y in range(3):
-            if (RoomView.board[y][0] == RoomView.board[y][1] and
-                    RoomView.board[y][0] == RoomView.board[y][2] and
-                    RoomView.board[y][0]!=''):
-                return RoomView.board[y][0]
+            if (RoomView.board[self.room_name][y][0] == RoomView.board[self.room_name][y][1] and
+                    RoomView.board[self.room_name][y][0] == RoomView.board[self.room_name][y][2] and
+                    RoomView.board[self.room_name][y][0]!=''):
+                return RoomView.board[self.room_name][y][0]
 
-        if (RoomView.board[0][0] == RoomView.board[1][1] and
-                RoomView.board[0][0] == RoomView.board[2][2] and
-                RoomView.board[0][0]!=''):
-            return RoomView.board[0][0]
+        if (RoomView.board[self.room_name][0][0] == RoomView.board[self.room_name][1][1] and
+                RoomView.board[self.room_name][0][0] == RoomView.board[self.room_name][2][2] and
+                RoomView.board[self.room_name][0][0]!=''):
+            return RoomView.board[self.room_name][0][0]
 
-        if (RoomView.board[2][0] == RoomView.board[1][1] and
-                RoomView.board[2][0] == RoomView.board[0][2] and
-                RoomView.board[2][0]!=''):
-            return RoomView.board[2][0]
+        if (RoomView.board[self.room_name][2][0] == RoomView.board[self.room_name][1][1] and
+                RoomView.board[self.room_name][2][0] == RoomView.board[self.room_name][0][2] and
+                RoomView.board[self.room_name][2][0]!=''):
+            return RoomView.board[self.room_name][2][0]
         for x in range(3):
             for y in range(3):
-                if RoomView.board[y][x] =='':
+                if RoomView.board[self.room_name][y][x] =='':
                     return False
         return "Draw"
