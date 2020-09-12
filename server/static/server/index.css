@@ -1,0 +1,17 @@
+body{
+	background-color: #333333;	
+}
+.intro{
+	color: #f1ab05;
+	font-size: 20px;
+}
+#room-name-input{
+	color: white;
+	background-color: black;
+}
+#room-name-submit{
+	color: #f1ab05;
+	font-size: 20px;
+	background-color: black;
+	margin-top: 8px;
+}
