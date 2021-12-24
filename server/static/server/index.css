@@ -15,3 +15,18 @@ body{
 	background-color: black;
 	margin-top: 8px;
 }
+.room-name-wrapper {
+	justify-content: center;
+	text-decoration: none;
+}
+.room-name {
+    background-color: black;
+    margin-top: 10px;
+    width: 250px;
+    text-align: center;
+    color: #f1ab05;
+}
+.room-name:hover {
+	border-color: white;
+    border-style: solid;
+}

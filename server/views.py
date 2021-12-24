@@ -3,7 +3,7 @@ from django.views.generic import TemplateView
 
 
 def index(request):
-    return render(request, 'server/index.html')
+    return render(request, 'server/index.html', {'room_names':list(RoomView.board.keys())})
 
 
 class RoomView(TemplateView):

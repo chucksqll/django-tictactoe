@@ -19,6 +19,11 @@
         <div class="row">
             <input id="room-name-submit" type="button" value="Enter">
         </div>
+        {%for i in room_names%}
+            <a class="row room-name-wrapper" href={{request.path}}{{i}}>
+                <div class="room-name">{{i}}</div>
+            </a>
+        {%endfor%}
     </div>
     <script>
         document.querySelector('#room-name-input').focus();

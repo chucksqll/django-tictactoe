@@ -44,7 +44,7 @@ class ServerConsumer(AsyncWebsocketConsumer):
             self.restart()           
         elif text == RoomView.last_turn[self.room_name]:
             print('wait, until your turn')
-            text=''
+            text = 'O' if text == 'O' else 'X' 
         elif text != '':
             if text is None:
                 text = ''
